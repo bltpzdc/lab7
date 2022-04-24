@@ -83,6 +83,11 @@ public class CollectionManager {
             ServerSender serverSender = new ServerSender();
             serverSender.send(serverAnswer);
         }
+        else if (id<0){
+            ServerAnswer serverAnswer = new ServerAnswer("ID should be higher than 0.");
+            ServerSender serverSender = new ServerSender();
+            serverSender.send(serverAnswer);
+        }
         if (needUpdate>0) {
             movieList.removeIf(i -> i.getID() == id);
             movie.setId(id);

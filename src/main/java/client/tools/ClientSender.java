@@ -10,10 +10,10 @@ import java.net.*;
 public class ClientSender {
     private static final int SERVER_PORT=8000;
     public void send(DatagramSocket clientSocket, Command command) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try(ObjectOutputStream ous = new ObjectOutputStream(baos)){
-            ous.writeObject(command);
-            DatagramPacket packet = new DatagramPacket(baos.toByteArray(), baos.toByteArray().length, InetAddress.getByName("localhost"), SERVER_PORT);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)){
+            objectOutputStream.writeObject(command);
+            DatagramPacket packet = new DatagramPacket(byteArrayOutputStream.toByteArray(), byteArrayOutputStream.toByteArray().length, InetAddress.getByName("localhost"), SERVER_PORT);
             clientSocket.send(packet);
             clientSocket.setSoTimeout(3000);
 

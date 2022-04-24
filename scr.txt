@@ -1,2 +1,6 @@
 show
-execute_script scr.txt
+clear
+show
+history
+exit
+execute_script scr2.txt

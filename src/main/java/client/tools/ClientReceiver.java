@@ -20,8 +20,8 @@ public class ClientReceiver {
         catch (SocketTimeoutException e){
             System.out.println("Server is not available now.");
         }
-        try(ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(receiveArray))){
-            ServerAnswer serverAnswer = (ServerAnswer) ois.readObject();
+        try(ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(receiveArray))){
+            ServerAnswer serverAnswer = (ServerAnswer) objectInputStream.readObject();
             System.out.println(serverAnswer.getMessage());
         }
         catch (Exception e) {

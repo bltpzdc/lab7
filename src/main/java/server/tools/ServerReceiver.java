@@ -26,8 +26,8 @@ public class ServerReceiver {
         serverSocket.receive(receivePacket);
         datagramPacket = receivePacket;
         datagramSocket = serverSocket;
-        try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(receiveData))) {
-            Command command = (Command) ois.readObject();
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(receiveData))) {
+            Command command = (Command) objectInputStream.readObject();
             System.out.println("Command "+ command.getName()+" received.");
             invoker.execute(command);
             HistorySaver saver = new HistorySaver();
