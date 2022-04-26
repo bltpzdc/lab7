@@ -1,5 +1,6 @@
 package server;
 
+import clientAndServer.tools.collectionTools.CollectionSaver;
 import server.tools.ServerReceiver;
 import clientAndServer.tools.collectionTools.CollectionLoader;
 import clientAndServer.tools.collectionTools.CollectionManager;
@@ -16,12 +17,21 @@ public class Server {
         loader.load();
         CollectionManager collectionManager = new CollectionManager(loader);
         CommandManager commandManager = new CommandManager(collectionManager);
+        CollectionSaver saver = new CollectionSaver(collectionManager);
         DatagramSocket serverSocket = new DatagramSocket(SERVER_PORT);
         while(true) {
             ServerReceiver receiver = new ServerReceiver();
             receiver.receive(serverSocket);
-
+            saver.save();
+            shuttingDown(collectionManager);
         }
+    }
 
+    private static void shuttingDown(CollectionManager manager){
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            CollectionSaver saver = new CollectionSaver(manager);
+            saver.save();
+            System.out.println("Server is closed");
+        }));
     }
 }

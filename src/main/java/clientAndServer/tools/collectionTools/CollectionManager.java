@@ -30,9 +30,9 @@ public class CollectionManager {
     }
 
     public void info(){
-        String[] listik =  movieList.getClass().getName().split("\\.");
+
         ServerAnswer serverAnswer = new ServerAnswer( "Collection information:\n"+
-                "Type: "+listik[listik.length-1]+".\n"+
+                "Type: "+movieList.toString()+".\n"+
                 "Initialize date: "+movieList.getInitTime()+".\n"+
                 "Element count: "+movieList.size());
         ServerSender serverSender = new ServerSender();
@@ -176,7 +176,7 @@ public class CollectionManager {
             serverSender.send(serverAnswer);
         }
         else if (index<1){
-            ServerAnswer serverAnswer = new ServerAnswer("Index can not be lower than 0. Please, enter index from 0 to "+(movieList.size()-1)+".");
+            ServerAnswer serverAnswer = new ServerAnswer("Index can not be lower than 0. Please, enter index from 0 to "+(movieList.size())+".");
             ServerSender serverSender = new ServerSender();
             serverSender.send(serverAnswer);
         }

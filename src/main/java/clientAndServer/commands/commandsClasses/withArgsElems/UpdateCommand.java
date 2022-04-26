@@ -22,12 +22,9 @@ public class UpdateCommand implements Command, Serializable {
     public UpdateCommand(CollectionManager movieList){
         this.movieList=movieList;
     }
-    public UpdateCommand(String name, String params) throws NonArgsExeption, IllegalArgumentException{
+    public UpdateCommand(String name, String params){
         this.name=name;
         this.params = params;
-        if (params.equals("")){throw new NonArgsExeption();
-        }
-        tryParse(params);
         MovieBuilder movieBuilder = new MovieBuilder();
         movie = movieBuilder.build();
     }
@@ -52,13 +49,7 @@ public class UpdateCommand implements Command, Serializable {
         return true;
     }
 
-    public int tryParse(String text){
-        try{
-            return Integer.parseInt(text);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("Invalid argument. You should enter only numbers as arguments.");
-            throw new IllegalArgumentException();
-        }
+    public static int tryParse(String text) throws IllegalArgumentException {
+        return Integer.parseInt(text);
     }
 }

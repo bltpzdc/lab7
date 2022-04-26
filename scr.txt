@@ -2,5 +2,4 @@ show
 clear
 show
 history
-exit
 execute_script scr2.txt

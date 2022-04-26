@@ -1,3 +1,2 @@
-remove_by_id abc
 remove_by_id 1
-execute_script scr.txt
+execute_script scr3.txt

@@ -22,12 +22,9 @@ public class InsertAtCommand implements Command, Serializable {
     public InsertAtCommand(CollectionManager manager){
         this.manager=manager;
     }
-    public InsertAtCommand(String name, String params) throws NonArgsExeption, IllegalArgumentException{
+    public InsertAtCommand(String name, String params){
         this.name=name;
         this.params = params;
-        if (params.equals("")){throw new NonArgsExeption();
-        }
-        tryParse(params);
         MovieBuilder movieBuilder = new MovieBuilder();
         movie = movieBuilder.build();
     }
@@ -51,13 +48,7 @@ public class InsertAtCommand implements Command, Serializable {
     public boolean isWithArgs() {
         return true;
     }
-    public int tryParse(String text){
-        try{
-            return Integer.parseInt(text);
-        }
-        catch (NumberFormatException e){
-            System.out.println("Invalid argument. You should enter only numbers as arguments.");
-            throw new IllegalArgumentException();
-        }
+    public static int tryParse(String text) throws IllegalArgumentException {
+        return Integer.parseInt(text);
     }
 }

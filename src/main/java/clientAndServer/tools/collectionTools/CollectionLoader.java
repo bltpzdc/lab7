@@ -15,11 +15,9 @@ import java.util.List;
 public class CollectionLoader {
     private CustomVector<Movie> movieList;
 
-    public CollectionLoader(){}
-
     public void load() {
         var env = System.getenv();
-        File fileName = new File("src\\main\\resources\\"+env.get("PROCESSOR_ARCHITECTURE") + ".json");
+        File fileName = new File(env.get("PROCESSOR_ARCHITECTURE") + ".json");
             List<String> filesLines = new ArrayList<>();
             try /*(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName))))*/ {
                 //File fileName = new File("src\\main\\resources\\"+env.get("PROCESSOR_ARCHITECTURE") + ".json");

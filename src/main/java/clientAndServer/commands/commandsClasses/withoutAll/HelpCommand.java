@@ -21,10 +21,8 @@ public class HelpCommand implements Command, Serializable {
     public HelpCommand(CollectionManager manager){
         this.manager=manager;
     }
-    public HelpCommand(String name, String params) throws TooManyArgsException {
+    public HelpCommand(String name, String params){
         this.name=name;
-        if (!params.equals("")){throw new TooManyArgsException();
-        }
     }
 
     @Override

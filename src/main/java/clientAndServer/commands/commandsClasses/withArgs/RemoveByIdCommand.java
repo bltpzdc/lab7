@@ -22,12 +22,9 @@ public class RemoveByIdCommand implements Command, Serializable {
         this.movieList=movieList;
     }
 
-    public RemoveByIdCommand(String name, String params) throws NonArgsExeption, IllegalArgumentException{
+    public RemoveByIdCommand(String name, String params){
         this.name=name;
         this.params = params;
-        if (params.equals("")){throw new NonArgsExeption();
-        }
-        tryParse(params);
     }
 
     @Override
@@ -49,13 +46,7 @@ public class RemoveByIdCommand implements Command, Serializable {
     public boolean isWithArgs() {
         return true;
     }
-    public int tryParse(String text){
-        try{
-            return Integer.parseInt(text);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println("Invalid argument");
-            throw new IllegalArgumentException();
-        }
+    public static int tryParse(String text) throws IllegalArgumentException {
+        return Integer.parseInt(text);
     }
 }

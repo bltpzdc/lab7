@@ -21,16 +21,9 @@ public class GroupCountingIdCommand implements Command, Serializable {
     public GroupCountingIdCommand(CollectionManager manager){
         this.manager=manager;
     }
-    public GroupCountingIdCommand(String name, String params) throws TooManyArgsException {
+    public GroupCountingIdCommand(String name, String params){
         this.name=name;
-        if (!params.equals("")){throw new TooManyArgsException();
-        }
     }
-
-    /*@Override
-    public void setParams(String params) {
-        this.params = params;
-    }*/
 
     @Override
     public void execute(String params) {

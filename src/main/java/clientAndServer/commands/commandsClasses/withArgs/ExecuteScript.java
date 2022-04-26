@@ -20,11 +20,9 @@ public class ExecuteScript implements Command, Serializable {
     public ExecuteScript(CollectionManager manager){
         this.manager=manager;
     }
-    public ExecuteScript(String name, String params) throws NonArgsExeption {
+    public ExecuteScript(String name, String params){
         this.name=name;
         this.params = params;
-        if (params.equals("")){throw new NonArgsExeption();
-        }
     }
 
     @Override

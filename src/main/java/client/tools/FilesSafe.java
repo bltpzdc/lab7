@@ -17,4 +17,8 @@ public class FilesSafe {
     public static void pop(){
         filesList.remove(filesList.size()-1);
     }
+
+    public static void clear(){
+        filesList.clear();
+    }
 }

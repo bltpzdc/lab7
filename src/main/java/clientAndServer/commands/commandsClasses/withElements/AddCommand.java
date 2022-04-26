@@ -22,10 +22,8 @@ public class AddCommand implements Command, Serializable {
     public AddCommand(CollectionManager manager){
         this.manager=manager;
     }
-    public AddCommand(String name, String params) throws TooManyArgsException {
+    public AddCommand(String name, String params) {
         this.name=name;
-        if (!params.equals("")){throw new TooManyArgsException();
-        }
         MovieBuilder movieBuilder = new MovieBuilder();
         movie = movieBuilder.build();
     }

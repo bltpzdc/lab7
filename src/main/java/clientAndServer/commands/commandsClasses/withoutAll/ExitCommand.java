@@ -21,10 +21,8 @@ public class ExitCommand implements Command, Serializable {
     public ExitCommand(CollectionManager manager){
         this.manager=manager;
     }
-    public ExitCommand(String name, String params) throws TooManyArgsException {
+    public ExitCommand(String name, String params) {
         this.name=name;
-        if (!params.equals("")){throw new TooManyArgsException();
-        }
     }
 
 

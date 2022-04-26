@@ -1,6 +1,10 @@
 package client;
 
 import client.tools.ClientReceiver;
+import clientAndServer.exeptions.ExecCommException;
+import clientAndServer.exeptions.InvalidNameException;
+import clientAndServer.exeptions.NonArgsExeption;
+import clientAndServer.exeptions.TooManyArgsException;
 import clientAndServer.tools.consoleTools.ConsoleReader;
 
 import java.io.IOException;
@@ -16,15 +20,23 @@ public class Client {
                 reader.run(clientSocket);
                 if (ConsoleReader.isToExit())
                     break;
+                receiver.receive(clientSocket);
+            } catch (IllegalArgumentException e){
+                System.out.println("Illegal argument");
             }
-            catch (Exception e){
-                continue;
+            catch(InvalidNameException e){
+                System.out.println("Invalid name of command. Use help for list of available commands.");
             }
-            try{receiver.receive(clientSocket);}
-            catch (SocketTimeoutException e){
-                System.out.println("Server is not available now.");
-                break;
+            catch (NonArgsExeption e){
+                System.out.println("You did not enter the argument");
             }
+             catch (TooManyArgsException e){
+                 System.out.println("You entered more arguments that we need.");
+             }
+            catch (IOException | ExecCommException ignored){
+            }
+
+            //receiver.receive(clientSocket);
         }
 
     }

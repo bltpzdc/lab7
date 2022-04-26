@@ -22,12 +22,9 @@ public class MpaaFilterCommand implements Command, Serializable {
         tryParse(params);
     }
 
-    public MpaaFilterCommand(String name, String params) throws NonArgsExeption, IllegalArgumentException{
+    public MpaaFilterCommand(String name, String params){
         this.name=name;
         this.params = params;
-        if (params.equals("")){throw new NonArgsExeption();
-        }
-        tryParse(params);
     }
 
     public MpaaFilterCommand(CollectionManager manager){
@@ -54,14 +51,7 @@ public class MpaaFilterCommand implements Command, Serializable {
     public boolean isWithArgs() {
         return true;
     }
-    public MpaaRating tryParse(String text){
-        try{
-            MpaaRating mpaaRating = MpaaRating.valueOf(text);
-            return mpaaRating;
-        }
-        catch (IllegalArgumentException e){
-            System.out.println("Invalid parameter. Try G, PG, PG_13 or R");
-            throw new IllegalArgumentException();
-        }
+    public static MpaaRating tryParse(String text) throws IllegalArgumentException {
+        return MpaaRating.valueOf(text);
     }
 }

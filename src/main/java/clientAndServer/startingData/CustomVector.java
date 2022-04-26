@@ -11,4 +11,7 @@ public class CustomVector<T> extends Vector<T> {
     public LocalDate getInitTime(){
         return initTime;
     }
+    public String toString(){
+        return "Custom Vector";
+    }
 }

@@ -23,8 +23,6 @@ public class HistoryCommand implements Command, Serializable {
     }
     public HistoryCommand(String name, String params) throws TooManyArgsException {
         this.name=name;
-        if (!params.equals("")){throw new TooManyArgsException();
-        }
     }
 
     @Override

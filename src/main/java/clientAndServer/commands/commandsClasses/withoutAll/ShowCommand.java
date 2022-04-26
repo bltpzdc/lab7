@@ -22,10 +22,8 @@ public class ShowCommand implements Command, Serializable {
     public ShowCommand(CollectionManager manager){
         this.manager=manager;
     }
-    public ShowCommand(String name, String params) throws TooManyArgsException {
+    public ShowCommand(String name, String params){
         this.name=name;
-        if (!params.equals("")){throw new TooManyArgsException();
-        }
     }
 
     @Override

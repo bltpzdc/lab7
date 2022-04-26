@@ -23,8 +23,6 @@ public class InfoCommand implements Command, Serializable {
     }
     public InfoCommand(String name, String params) throws TooManyArgsException {
         this.name=name;
-        if (!params.equals("")){throw new TooManyArgsException();
-        }
     }
 
     @Override

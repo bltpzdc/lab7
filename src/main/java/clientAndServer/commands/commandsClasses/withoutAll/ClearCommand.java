@@ -21,10 +21,8 @@ public class ClearCommand implements Command, Serializable {
     public ClearCommand(CollectionManager movieList){
         this.movieList=movieList;
     }
-    public ClearCommand(String name, String params) throws TooManyArgsException {
+    public ClearCommand(String name, String params){
         this.name=name;
-        if (!params.equals("")){throw new TooManyArgsException();
-        }
     }
 
     @Override

@@ -22,10 +22,8 @@ public class RemoveGreaterCommand implements Command, Serializable {
     public RemoveGreaterCommand(CollectionManager manager){
         this.manager=manager;
     }
-    public RemoveGreaterCommand(String name, String params) throws TooManyArgsException {
+    public RemoveGreaterCommand(String name, String params){
         this.name=name;
-        if (!params.equals("")){throw new TooManyArgsException();
-        }
         MovieBuilder movieBuilder = new MovieBuilder();
         movie = movieBuilder.build();
     }
