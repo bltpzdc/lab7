@@ -17,10 +17,11 @@ public class CollectionLoader {
 
     public void load() {
         var env = System.getenv();
-        File fileName = new File(env.get("PROCESSOR_ARCHITECTURE") + ".json");
+        System.out.println(env);
+        File fileName = new File(env.get("COLLECTION"));
+        System.out.println(fileName);
             List<String> filesLines = new ArrayList<>();
-            try /*(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName))))*/ {
-                //File fileName = new File("src\\main\\resources\\"+env.get("PROCESSOR_ARCHITECTURE") + ".json");
+            try {
                 FileInputStream stream = new FileInputStream(fileName);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
                 String jsonHelper;
@@ -28,10 +29,7 @@ public class CollectionLoader {
                     filesLines.add(jsonHelper);
                 }
                 stream.close();
-                String json = "";
-                for (String i:filesLines){
-                    json+=i;
-                }
+                String json = String.join("", filesLines);
                 Gson gson = new GsonBuilder()
                         .setDateFormat("dd/MM/yyyy").create();
                 Type movieTypes = new TypeToken<CustomVector<Movie>>(){}.getType();

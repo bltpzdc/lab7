@@ -23,6 +23,8 @@ public class CollectionManager {
     private CustomVector<Movie> movieList;
     private UserInput userInput = new UserInput();
     private CollectionLoader loader;
+    ServerSender serverSender = new ServerSender();
+    ServerAnswer serverAnswer;
 
     public CollectionManager(CollectionLoader loader){
         this.loader=loader;
@@ -31,27 +33,24 @@ public class CollectionManager {
 
     public void info(){
 
-        ServerAnswer serverAnswer = new ServerAnswer( "Collection information:\n"+
+        serverAnswer = new ServerAnswer( "Collection information:\n"+
                 "Type: "+movieList.toString()+".\n"+
                 "Initialize date: "+movieList.getInitTime()+".\n"+
                 "Element count: "+movieList.size());
-        ServerSender serverSender = new ServerSender();
         serverSender.send(serverAnswer);
     }
 
     public void show(){
         String ans="";
         if (movieList.size()==0){
-            ServerAnswer serverAnswer = new ServerAnswer("There's no any elements in collection.");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("There's no any elements in collection.");
             serverSender.send(serverAnswer);
         }
         else{
             for (Movie i:movieList){
                 ans = ans+i+"\n";
             }
-            ServerAnswer serverAnswer = new ServerAnswer(ans);
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer(ans);
             serverSender.send(serverAnswer);
         }
     }
@@ -68,8 +67,7 @@ public class CollectionManager {
         else {id=1;}
         movie.setId(id);
         movieList.add(movie);
-        ServerAnswer serverAnswer = new ServerAnswer("New element has been added to collection.");
-        ServerSender serverSender = new ServerSender();
+        serverAnswer = new ServerAnswer("New element has been added to collection.");
         serverSender.send(serverAnswer);
     }
 
@@ -79,13 +77,11 @@ public class CollectionManager {
             if (sch.getID()==id) {needUpdate+=1;}
         }
         if ((needUpdate==0)&&(id>=0)){
-            ServerAnswer serverAnswer = new ServerAnswer("There is no any elements with this ID.");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("There is no any elements with this ID.");
             serverSender.send(serverAnswer);
         }
         else if (id<0){
-            ServerAnswer serverAnswer = new ServerAnswer("ID should be higher than 0.");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("ID should be higher than 0.");
             serverSender.send(serverAnswer);
         }
         if (needUpdate>0) {
@@ -93,8 +89,7 @@ public class CollectionManager {
             movie.setId(id);
             movieList.add(movie);
             Collections.sort(movieList);
-            ServerAnswer serverAnswer = new ServerAnswer("Element has been updated.");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("Element has been updated.");
             serverSender.send(serverAnswer);
         }
     }
@@ -105,31 +100,26 @@ public class CollectionManager {
             if (mo.getID()==id){needRemove+=1;}
         }
         if ((needRemove==0)&&(id>=0)){
-            ServerAnswer serverAnswer = new ServerAnswer("There is no any elements with this ID.");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("There is no any elements with this ID.");
             serverSender.send(serverAnswer);
         }
         else if (id<0){
-            ServerAnswer serverAnswer = new ServerAnswer("ID should be higher than 0.");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("ID should be higher than 0.");
             serverSender.send(serverAnswer);
         }
         if (needRemove>0) {
-            //movieList = (CustomVector<Movie>) movieList.stream().filter(i -> i.getID()!=id).collect(Collectors.toList());
             movieList.removeIf(i -> i.getID() == id);
-            ServerAnswer serverAnswer = new ServerAnswer("Element has been deleted from collection.");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("Element has been deleted from collection.");
             serverSender.send(serverAnswer);
         }
     }
     public void clear(){
         movieList.clear();
-        ServerAnswer serverAnswer = new ServerAnswer("All elements have been deleted from collection.");
-        ServerSender serverSender = new ServerSender();
+        serverAnswer = new ServerAnswer("All elements have been deleted from collection.");
         serverSender.send(serverAnswer);
     }
     public void help(){
-        ServerAnswer serverAnswer = new ServerAnswer("Commands :\n"+
+        serverAnswer = new ServerAnswer("Commands :\n"+
                 "info : collection information.\n"+
                 "show : all elements of collection.\n"+
                 "add {element} : add new element in collection.\n"+
@@ -145,7 +135,6 @@ public class CollectionManager {
                 "group_counting_by_id : group collection elements by their id and show count of elements in every group.\n"+
                 "filter_less_than_mpaa_rating mpaaRating : show elements with mpaa rating lower than specified.\n"+
                 "print_descending : show elements in descending order.");
-        ServerSender serverSender = new ServerSender();
         serverSender.send(serverAnswer);
     }
     public void save(){
@@ -166,18 +155,15 @@ public class CollectionManager {
             }
             movie.setId(id);
             movieList.add(index, movie);
-            ServerAnswer serverAnswer = new ServerAnswer("Element has been added");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("Element has been added");
             serverSender.send(serverAnswer);
         }
         else if (index>0){
-            ServerAnswer serverAnswer = new ServerAnswer("Index is bigger than you can enter. Please, enter index from 0 to "+(movieList.size())+".");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("Index is bigger than you can enter. Please, enter index from 0 to "+(movieList.size())+".");
             serverSender.send(serverAnswer);
         }
         else if (index<1){
-            ServerAnswer serverAnswer = new ServerAnswer("Index can not be lower than 0. Please, enter index from 0 to "+(movieList.size())+".");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("Index can not be lower than 0. Please, enter index from 0 to "+(movieList.size())+".");
             serverSender.send(serverAnswer);
         }
     }
@@ -185,8 +171,7 @@ public class CollectionManager {
         ArrayList<Movie> movs =(ArrayList<Movie>) movieList.stream().filter(i -> i.getID() >= movie.getID()).collect(Collectors.toList());
         movieList.clear();
         movieList.addAll(movs);
-        ServerAnswer serverAnswer = new ServerAnswer("Elements have been deleted.");
-        ServerSender serverSender = new ServerSender();
+        serverAnswer = new ServerAnswer("Elements have been deleted.");
         serverSender.send(serverAnswer);
     }
     public void mpaaRatingFilter(MpaaRating mpaaRating){
@@ -200,13 +185,11 @@ public class CollectionManager {
             }
         }
         if (sch==0){
-            ServerAnswer serverAnswer = new ServerAnswer("No elements with mpaa rating lower than introduced.");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("No elements with mpaa rating lower than introduced.");
             serverSender.send(serverAnswer);
         }
         else{
-            ServerAnswer serverAnswer = new ServerAnswer(ans);
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer(ans);
             serverSender.send(serverAnswer);
         }
     }
@@ -216,13 +199,11 @@ public class CollectionManager {
             for (int i = movieList.size() - 1; i > -1; i -= 1) {
                 ans = ans + movieList.get(i) + "\n";
             }
-            ServerAnswer serverAnswer = new ServerAnswer(ans);
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer(ans);
             serverSender.send(serverAnswer);
         }
         else{
-            ServerAnswer serverAnswer = new ServerAnswer("There is no any elements in collection.");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("There is no any elements in collection.");
             serverSender.send(serverAnswer);
         }
     }
@@ -231,8 +212,7 @@ public class CollectionManager {
     }
     public void history(){
         if (HistorySafe.getHistory().isEmpty()){
-            ServerAnswer serverAnswer = new ServerAnswer("You have not entered commands yet");
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer("You have not entered commands yet");
             serverSender.send(serverAnswer);
         }
         else{
@@ -240,8 +220,7 @@ public class CollectionManager {
             for (String i:HistorySafe.getHistory()){
                 outPut = outPut+i+" ";
             }
-            ServerAnswer serverAnswer = new ServerAnswer(outPut);
-            ServerSender serverSender = new ServerSender();
+            serverAnswer = new ServerAnswer(outPut);
             serverSender.send(serverAnswer);
         }
     }
@@ -252,14 +231,10 @@ public class CollectionManager {
             if (i.getID()%2==0){d2.add(i);}
             else{ud2.add(i);}
         }
-        ServerAnswer serverAnswer = new ServerAnswer("2 groups were created.\n" +
+        serverAnswer = new ServerAnswer("2 groups were created.\n" +
                 "Count of group 1 (elements with ID which is divisible by 2):"+d2.size()+"\n" +
                 "Count of group 2 (elements with ID which is not divisible by 2):"+ud2.size());
-        ServerSender serverSender = new ServerSender();
         serverSender.send(serverAnswer);
-    }
-    public void execScript(){
-
     }
 
     public void executeScript(String fileName) {

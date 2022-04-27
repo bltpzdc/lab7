@@ -19,7 +19,7 @@ public class CollectionSaver {
     public void save() {
         try {
             var env = System.getenv();
-            File fileName = new File(env.get("PROCESSOR_ARCHITECTURE") + ".json");
+            File fileName = new File(env.get("COLLECTION"));
             Gson gson = new GsonBuilder()
                     .setDateFormat("dd/MM/yyyy").create();
             String json = gson.toJson(movieList);
