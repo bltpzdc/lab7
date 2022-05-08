@@ -8,6 +8,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class ExecuteScript implements Command, Serializable {
     private String name="execute_script";
@@ -16,17 +17,23 @@ public class ExecuteScript implements Command, Serializable {
     private CollectionManager manager;
     @Getter @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
-    public ExecuteScript(CollectionManager manager){
-        this.manager=manager;
+    public ExecuteScript(CollectionManager movieList){
+        this.manager=movieList;
     }
-    public ExecuteScript(String name, String params){
+    public ExecuteScript(String name, String params, String username, String password){
         this.name=name;
-        this.params = params;
+        this.password = password;
+        this.username = username;
+        this.params=params;
     }
 
     @Override
-    public void execute(String params) {
+    public void execute(String params, String username, String password, DatagramPacket packet) {
         manager.executeScript(params);
     }
 

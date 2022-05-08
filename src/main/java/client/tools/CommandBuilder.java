@@ -1,5 +1,6 @@
 package client.tools;
 
+import client.Client;
 import clientAndServer.commands.Command;
 import clientAndServer.commands.commandsClasses.withArgs.MpaaFilterCommand;
 import clientAndServer.commands.commandsClasses.withArgs.RemoveByIdCommand;
@@ -19,36 +20,50 @@ import java.net.DatagramSocket;
 
 public class CommandBuilder {
 
-    public Command build(String arraysOfParams, String params, DatagramSocket clientSocket) throws TooManyArgsException, NonArgsExeption, InvalidNameException, ExecCommException, IOException {
+    public Command build(String arraysOfParams, String params, DatagramSocket clientSocket, String username, String password) throws TooManyArgsException, NonArgsExeption, InvalidNameException, ExecCommException, IOException {
         Command command = null;
         switch (arraysOfParams) {
+            case("log_in"):
+                if (!params.equals("")){throw new TooManyArgsException();}
+                command = new LoginCommand(arraysOfParams, params, username, password);
+                break;
+            case("register"):
+                if (!params.equals("")){throw new TooManyArgsException();}
+                command = new RegisterCommand(arraysOfParams, params, username, password);
+                break;
+            case ("sign_out"):
+                Client.setUsername("");
+                Client.setPassword("");
+                Authorizator.setAutFlag(false);
+                Client.setNeedToAuthorize(true);
+                break;
             case ("show"):
                 if (!params.equals("")){throw new TooManyArgsException();}
-                command = new ShowCommand(arraysOfParams, params);
+                command = new ShowCommand(arraysOfParams, params, username, password);
                 break;
             case ("clear"):
                 if (!params.equals("")){throw new TooManyArgsException();}
-                command = new ClearCommand(arraysOfParams, params);
+                command = new ClearCommand(arraysOfParams, params, username, password);
                 break;
             case ("group_counting_by_id"):
                 if (!params.equals("")){throw new TooManyArgsException();}
-                command = new GroupCountingIdCommand(arraysOfParams, params);
+                command = new GroupCountingIdCommand(arraysOfParams, params, username, password);
                 break;
             case ("help"):
                 if (!params.equals("")){throw new TooManyArgsException();}
-                command = new HelpCommand(arraysOfParams, params);
+                command = new HelpCommand(arraysOfParams, params, username, password);
                 break;
             case ("info"):
                 if (!params.equals("")){throw new TooManyArgsException();}
-                command = new InfoCommand(arraysOfParams, params);
+                command = new InfoCommand(arraysOfParams, params, username, password);
                 break;
             case ("print_descending"):
                 if (!params.equals("")){throw new TooManyArgsException();}
-                command = new PrintDescendingCommand(arraysOfParams, params);
+                command = new PrintDescendingCommand(arraysOfParams, params, username, password);
                 break;
             case ("history"):
                 if (!params.equals("")){throw new TooManyArgsException();}
-                command = new HistoryCommand(arraysOfParams, params);
+                command = new HistoryCommand(arraysOfParams, params, username, password);
                 break;
             case ("exit"):
                 if (!params.equals("")){throw new TooManyArgsException();}
@@ -69,30 +84,30 @@ public class CommandBuilder {
             case ("filter_less_than_mpaa_rating"):
                 if (params.equals("")){throw new NonArgsExeption();}
                 MpaaFilterCommand.tryParse(params);
-                command = new MpaaFilterCommand(arraysOfParams, params);
+                command = new MpaaFilterCommand(arraysOfParams, params, username, password);
                 break;
             case ("remove_by_id"):
                 if (params.equals("")){throw new NonArgsExeption();}
                 RemoveByIdCommand.tryParse(params);
-                command = new RemoveByIdCommand(arraysOfParams, params);
+                command = new RemoveByIdCommand(arraysOfParams, params, username, password);
                 break;
             case ("add"):
                 if (!params.equals("")){throw new TooManyArgsException();}
-                command = new AddCommand(arraysOfParams, params);
+                command = new AddCommand(arraysOfParams, params, username);
                 break;
             case ("remove_greater"):
                 if (!params.equals("")){throw new TooManyArgsException();}
-                command = new RemoveGreaterCommand(arraysOfParams, params);
+                command = new RemoveGreaterCommand(arraysOfParams, params, username);
                 break;
             case ("insert_at"):
                 if (params.equals("")){throw new NonArgsExeption();}
                 InsertAtCommand.tryParse(params);
-                command = new InsertAtCommand(arraysOfParams, params);
+                command = new InsertAtCommand(arraysOfParams, params, username);
                 break;
             case ("update"):
                 if (params.equals("")){throw new NonArgsExeption();}
                 UpdateCommand.tryParse(params);
-                command = new UpdateCommand(arraysOfParams, params);
+                command = new UpdateCommand(arraysOfParams, params, username);
                 break;
             default:
                 throw new InvalidNameException();

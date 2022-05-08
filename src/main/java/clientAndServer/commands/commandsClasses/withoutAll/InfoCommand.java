@@ -8,6 +8,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class InfoCommand implements Command, Serializable {
     private String name = "info";
@@ -17,17 +18,23 @@ public class InfoCommand implements Command, Serializable {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
-    public InfoCommand(CollectionManager manager){
-        this.manager=manager;
+    public InfoCommand(CollectionManager movieList){
+        this.manager=movieList;
     }
-    public InfoCommand(String name, String params) throws TooManyArgsException {
+    public InfoCommand(String name, String params, String username, String password){
         this.name=name;
+        this.password = password;
+        this.username = username;
     }
 
     @Override
-    public void execute(String params) {
-        manager.info();
+    public void execute(String params, String username, String password, DatagramPacket packet) {
+        manager.info(packet);
     }
 
     @Override

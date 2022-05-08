@@ -9,6 +9,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class RemoveGreaterCommand implements Command, Serializable {
     private String name="remove_greater";
@@ -18,19 +19,24 @@ public class RemoveGreaterCommand implements Command, Serializable {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
     public RemoveGreaterCommand(CollectionManager manager){
         this.manager=manager;
     }
-    public RemoveGreaterCommand(String name, String params){
+    public RemoveGreaterCommand(String name, String params, String username){
         this.name=name;
         MovieBuilder movieBuilder = new MovieBuilder();
         movie = movieBuilder.build();
+        this.username = username;
     }
 
     @Override
-    public void execute(Movie movie){
-        manager.removeGreater(movie);
+    public void execute(Movie movie, String username, DatagramPacket packet){
+        manager.removeGreater(movie, username, packet);
     }
 
 

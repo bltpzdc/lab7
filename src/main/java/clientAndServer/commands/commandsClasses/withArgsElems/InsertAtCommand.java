@@ -9,6 +9,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class InsertAtCommand implements Command, Serializable {
     private String name="insert_at";
@@ -18,20 +19,25 @@ public class InsertAtCommand implements Command, Serializable {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
     public InsertAtCommand(CollectionManager manager){
         this.manager=manager;
     }
-    public InsertAtCommand(String name, String params){
+    public InsertAtCommand(String name, String params, String username){
         this.name=name;
         this.params = params;
+        this.username = username;
         MovieBuilder movieBuilder = new MovieBuilder();
         movie = movieBuilder.build();
     }
 
     @Override
-    public void execute(String params, Movie movie) {
-        manager.insertAt(tryParse(params), movie);
+    public void execute(String params, Movie movie, String username, DatagramPacket packet) {
+        manager.insertAt(tryParse(params), movie, username, packet);
     }
 
     @Override

@@ -16,6 +16,7 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    implementation 'org.postgresql:postgresql:42.2.2'
     //implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
 
 }

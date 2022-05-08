@@ -5,6 +5,8 @@ import clientAndServer.exeptions.InvalidNameException;
 import clientAndServer.exeptions.NonArgsExeption;
 import clientAndServer.exeptions.TooManyArgsException;
 
+import java.net.DatagramPacket;
+
 public class Invoker {
 
     public void findCommand(String name, String params) throws InvalidNameException, NonArgsExeption, TooManyArgsException {
@@ -13,18 +15,18 @@ public class Invoker {
         else if ((CommandManager.getCommands().get(name).isWithArgs()==false)&&(params!="")){throw new TooManyArgsException();}
         Command command = CommandManager.getCommands().get(name);
         command.setParams(params);
-        execute(command);
+        execute(command, null);
     }
 
-    public void execute(Command command){
+    public void execute(Command command, DatagramPacket packet){
         if (command.isWithElement()&&!command.isWithArgs()){
-            CommandManager.getCommands().get(command.getName()).execute(command.getMovie());
+            CommandManager.getCommands().get(command.getName()).execute(command.getMovie(), command.getUsername(), packet);
         }
         else if (command.isWithArgs()&&command.isWithElement()){
-            CommandManager.getCommands().get(command.getName()).execute(command.getParams(), command.getMovie());
+            CommandManager.getCommands().get(command.getName()).execute(command.getParams(), command.getMovie(), command.getUsername(), packet);
         }
         else {
-            CommandManager.getCommands().get(command.getName()).execute(command.getParams());
+            CommandManager.getCommands().get(command.getName()).execute(command.getParams(), command.getUsername(), command.getPassword(), packet);
         }
     }
 }

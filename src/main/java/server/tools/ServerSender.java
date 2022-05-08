@@ -8,11 +8,11 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 
 public class ServerSender {
-    public void send(ServerAnswer answer){
+    public void send(ServerAnswer answer, DatagramPacket packet){
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)){
             objectOutputStream.writeObject(answer);
-            DatagramPacket sendPacket = new DatagramPacket(byteArrayOutputStream.toByteArray(), byteArrayOutputStream.toByteArray().length, ServerReceiver.getDatagramPacket().getAddress(), ServerReceiver.getDatagramPacket().getPort());
+            DatagramPacket sendPacket = new DatagramPacket(byteArrayOutputStream.toByteArray(), byteArrayOutputStream.toByteArray().length, packet.getAddress(), packet.getPort());
             ServerReceiver.getDatagramSocket().send(sendPacket);
             System.out.println("Answer sent");
         } catch (Exception e) {

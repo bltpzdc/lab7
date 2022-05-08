@@ -6,6 +6,8 @@ import clientAndServer.startingData.Movie;
 import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
+import java.net.DatagramPacket;
+
 public class SaveCommand implements Command {
     private String name="save";
     @Getter
@@ -14,13 +16,22 @@ public class SaveCommand implements Command {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
-    public SaveCommand(CollectionManager manager){
-        this.manager=manager;
+    public SaveCommand(CollectionManager movieList){
+        this.manager=movieList;
+    }
+    public SaveCommand(String name, String params, String username, String password){
+        this.name=name;
+        this.password = password;
+        this.username = username;
     }
 
     @Override
-    public void execute(String params) {
+    public void execute(String params, String username, String password, DatagramPacket packet) {
         manager.save();
     }
 

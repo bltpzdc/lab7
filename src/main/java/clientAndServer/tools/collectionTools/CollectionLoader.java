@@ -5,21 +5,21 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import clientAndServer.startingData.CustomVector;
 import clientAndServer.startingData.Movie;
+import server.tools.DatabaseCommunicator;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class CollectionLoader {
-    private CustomVector<Movie> movieList;
+    private CustomVector<Movie> movieList = new CustomVector<>();
 
     public void load() {
         var env = System.getenv();
-        System.out.println(env);
         File fileName = new File(env.get("COLLECTION"));
-        System.out.println(fileName);
             List<String> filesLines = new ArrayList<>();
             try {
                 FileInputStream stream = new FileInputStream(fileName);
@@ -45,6 +45,16 @@ public class CollectionLoader {
                 this.movieList = gson.fromJson(json, movieTypes);
                 Collections.sort(movieList);
             }
+    }
+
+    public void loadDatabase(){
+        try {
+            new DatabaseCommunicator().load(movieList);
+        } catch (SQLException e) {
+            System.out.println("Can't connect to database.");
+        } catch (ClassNotFoundException e) {
+            System.out.println("No such driver to connect to database.");
+        }
     }
 
     public CustomVector<Movie> getMovieList(){

@@ -8,6 +8,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class PrintDescendingCommand implements Command, Serializable {
     private String name="print_descending";
@@ -17,17 +18,23 @@ public class PrintDescendingCommand implements Command, Serializable {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
-    public PrintDescendingCommand(CollectionManager manager){
-        this.manager=manager;
+    public PrintDescendingCommand(CollectionManager movieList){
+        this.manager=movieList;
     }
-    public PrintDescendingCommand(String name, String params) throws TooManyArgsException {
+    public PrintDescendingCommand(String name, String params, String username, String password){
         this.name=name;
+        this.password = password;
+        this.username = username;
     }
 
     @Override
-    public void execute(String params) {
-        manager.printDescending();
+    public void execute(String params, String username, String password, DatagramPacket packet) {
+        manager.printDescending(packet);
     }
 
     @Override

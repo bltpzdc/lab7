@@ -1,5 +1,6 @@
 package client.tools;
 
+import client.Client;
 import clientAndServer.commands.Command;
 import clientAndServer.commands.commandsClasses.withArgs.MpaaFilterCommand;
 import clientAndServer.commands.commandsClasses.withArgs.RemoveByIdCommand;
@@ -48,7 +49,7 @@ public class Scripter {
                 System.arraycopy(arraysOfParams,1,params,0,arraysOfParams.length - 1);
             }
             if (params.length<=1) {
-                Command command = commandBuilder.build(arraysOfParams[0], params[0], clientSocket);
+                Command command = commandBuilder.build(arraysOfParams[0], params[0], clientSocket, Client.getUsername(), Client.getPassword());
                 if (command != null) {
                     packetsSender.send(clientSocket, command);
                     try{

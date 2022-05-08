@@ -1,5 +1,0 @@
-show
-clear
-show
-history
-execute_script scr2.txt

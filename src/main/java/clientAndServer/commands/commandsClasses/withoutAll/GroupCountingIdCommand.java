@@ -8,6 +8,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class GroupCountingIdCommand implements Command, Serializable {
     private String name="group_counting_by_id";
@@ -17,17 +18,23 @@ public class GroupCountingIdCommand implements Command, Serializable {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
-    public GroupCountingIdCommand(CollectionManager manager){
-        this.manager=manager;
+    public GroupCountingIdCommand(CollectionManager movieList){
+        this.manager=movieList;
     }
-    public GroupCountingIdCommand(String name, String params){
+    public GroupCountingIdCommand(String name, String params, String username, String password){
         this.name=name;
+        this.password = password;
+        this.username = username;
     }
 
     @Override
-    public void execute(String params) {
-        manager.groupCountingId();
+    public void execute(String params, String username, String password, DatagramPacket packet) {
+        manager.groupCountingId(packet);
     }
 
     @Override

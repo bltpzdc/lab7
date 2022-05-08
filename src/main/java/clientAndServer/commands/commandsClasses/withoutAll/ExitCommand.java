@@ -8,6 +8,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class ExitCommand implements Command, Serializable {
     private String name="exit";
@@ -17,17 +18,23 @@ public class ExitCommand implements Command, Serializable {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
-    public ExitCommand(CollectionManager manager){
-        this.manager=manager;
+    public ExitCommand(CollectionManager movieList){
+        this.manager=movieList;
     }
-    public ExitCommand(String name, String params) {
+    public ExitCommand(String name, String params, String username, String password){
         this.name=name;
+        this.password = password;
+        this.username = username;
     }
 
 
     @Override
-    public void execute(String params) {
+    public void execute(String params, String username, String password, DatagramPacket packet) {
         manager.exit();
     }
 

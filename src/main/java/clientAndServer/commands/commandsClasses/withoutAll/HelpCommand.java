@@ -8,6 +8,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class HelpCommand implements Command, Serializable {
     private String name = "help";
@@ -17,12 +18,18 @@ public class HelpCommand implements Command, Serializable {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
-    public HelpCommand(CollectionManager manager){
-        this.manager=manager;
+    public HelpCommand(CollectionManager movieList){
+        this.manager=movieList;
     }
-    public HelpCommand(String name, String params){
+    public HelpCommand(String name, String params, String username, String password){
         this.name=name;
+        this.password = password;
+        this.username = username;
     }
 
     @Override
@@ -41,7 +48,7 @@ public class HelpCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params) {
-        manager.help();
+    public void execute(String params, String username, String password, DatagramPacket packet) {
+        manager.help(packet);
     }
 }

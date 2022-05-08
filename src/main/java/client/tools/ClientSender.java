@@ -15,7 +15,7 @@ public class ClientSender {
             objectOutputStream.writeObject(command);
             DatagramPacket packet = new DatagramPacket(byteArrayOutputStream.toByteArray(), byteArrayOutputStream.toByteArray().length, InetAddress.getByName("localhost"), SERVER_PORT);
             clientSocket.send(packet);
-            clientSocket.setSoTimeout(3000);
+            clientSocket.setSoTimeout(7000);
 
             System.out.println("Command "+command.getName()+" sent.\n");
         }

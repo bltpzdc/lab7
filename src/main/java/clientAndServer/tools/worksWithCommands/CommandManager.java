@@ -42,5 +42,7 @@ public class CommandManager {
         registerCommand(new HistoryCommand(manager));
         registerCommand(new GroupCountingIdCommand(manager));
         registerCommand(new ExecuteScript(manager));
+        registerCommand(new LoginCommand(manager));
+        registerCommand(new RegisterCommand(manager));
     }
 }

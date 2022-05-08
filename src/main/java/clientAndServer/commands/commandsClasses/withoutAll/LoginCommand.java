@@ -1,21 +1,19 @@
 package clientAndServer.commands.commandsClasses.withoutAll;
 
-import clientAndServer.exeptions.TooManyArgsException;
-import lombok.Getter;
-import lombok.Setter;
+import clientAndServer.commands.Command;
 import clientAndServer.startingData.Movie;
 import clientAndServer.tools.collectionTools.CollectionManager;
-import clientAndServer.commands.Command;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.net.DatagramPacket;
 
-public class ShowCommand implements Command, Serializable {
-    private String name="show";
+public class LoginCommand implements Command, Serializable {
+    private String name="log_in";
     @Getter
     private Movie movie;
-    private final boolean isWithElement=false;
-    private CollectionManager manager;
+    private CollectionManager movieList;
     @Getter
     @Setter
     private String params;
@@ -24,10 +22,10 @@ public class ShowCommand implements Command, Serializable {
     @Getter
     private String password;
 
-    public ShowCommand(CollectionManager movieList){
-        this.manager=movieList;
+    public LoginCommand(CollectionManager movieList){
+        this.movieList=movieList;
     }
-    public ShowCommand(String name, String params, String username, String password){
+    public LoginCommand(String name, String params, String username, String password){
         this.name=name;
         this.password = password;
         this.username = username;
@@ -35,7 +33,7 @@ public class ShowCommand implements Command, Serializable {
 
     @Override
     public void execute(String params, String username, String password, DatagramPacket packet) {
-        manager.show(packet);
+        movieList.login(username, password, packet);
     }
 
     @Override

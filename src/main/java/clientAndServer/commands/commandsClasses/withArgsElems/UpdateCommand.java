@@ -9,6 +9,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class UpdateCommand implements Command, Serializable {
     private CollectionManager movieList;
@@ -18,20 +19,25 @@ public class UpdateCommand implements Command, Serializable {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
     public UpdateCommand(CollectionManager movieList){
         this.movieList=movieList;
     }
-    public UpdateCommand(String name, String params){
+    public UpdateCommand(String name, String params, String username){
         this.name=name;
         this.params = params;
+        this.username = username;
         MovieBuilder movieBuilder = new MovieBuilder();
         movie = movieBuilder.build();
     }
 
     @Override
-    public void execute(String params, Movie movie) {
-        movieList.update(tryParse(params), movie);
+    public void execute(String params, Movie movie, String username, DatagramPacket packet) {
+        movieList.update(tryParse(params), movie, username, packet);
     }
 
     @Override

@@ -8,21 +8,18 @@ import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketTimeoutException;
+import java.util.Objects;
 
 public class ClientReceiver {
     public void receive(DatagramSocket clientSocket) throws IOException {
         byte[] receiveArray = new byte[8096];
         DatagramPacket receivePacket = new DatagramPacket(receiveArray, receiveArray.length);
-        try {
             clientSocket.receive(receivePacket);
             System.out.println("Answer from server received:");
-        }
-        catch (SocketTimeoutException e){
-            System.out.println("Server is not available now.");
-        }
         try(ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(receiveArray))){
             ServerAnswer serverAnswer = (ServerAnswer) objectInputStream.readObject();
             System.out.println(serverAnswer.getMessage());
+            if (Objects.equals(serverAnswer.getMessage(), "You are authorized. Write sign_out to exit from account.")) Authorizator.setAutFlag(true);
         }
         catch (Exception e) {
             //e.printStackTrace();

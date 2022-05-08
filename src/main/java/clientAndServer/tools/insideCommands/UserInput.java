@@ -34,11 +34,11 @@ public class UserInput {
         return getter.parseSomething((x) -> {
             try {
                 Double result = Double.parseDouble(x);
-                if (result<9) {
+                if (result<8) {
                     return Optional.of(result);
                 }
                 else{
-                    System.out.println("This field can not be higher than 8.");
+                    System.out.println("This field can not be higher than 7.");
                     return Optional.empty();
                 }
             } catch (NumberFormatException ignored) {

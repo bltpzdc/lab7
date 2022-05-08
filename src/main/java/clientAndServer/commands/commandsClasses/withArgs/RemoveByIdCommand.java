@@ -8,6 +8,7 @@ import clientAndServer.tools.collectionTools.CollectionManager;
 import clientAndServer.commands.Command;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
 
 public class RemoveByIdCommand implements Command, Serializable {
     private String name="remove_by_id";
@@ -17,19 +18,24 @@ public class RemoveByIdCommand implements Command, Serializable {
     @Getter
     @Setter
     private String params;
+    @Getter
+    private String username;
+    @Getter
+    private String password;
 
     public RemoveByIdCommand(CollectionManager movieList){
         this.movieList=movieList;
     }
-
-    public RemoveByIdCommand(String name, String params){
+    public RemoveByIdCommand(String name, String params, String username, String password){
         this.name=name;
-        this.params = params;
+        this.password = password;
+        this.username = username;
+        this.params=params;
     }
 
     @Override
-    public void execute(String params) {
-        movieList.remove(tryParse(params));
+    public void execute(String params, String username, String password, DatagramPacket packet) {
+        movieList.remove(tryParse(params), username, packet);
     }
 
     @Override

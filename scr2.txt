@@ -1,2 +1,0 @@
-remove_by_id 1
-execute_script scr3.txt
