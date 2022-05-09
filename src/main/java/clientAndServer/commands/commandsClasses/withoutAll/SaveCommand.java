@@ -31,7 +31,7 @@ public class SaveCommand implements Command {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
+    public void execute(String params, String username, String password) {
         manager.save();
     }
 

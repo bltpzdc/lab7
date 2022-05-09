@@ -36,8 +36,8 @@ public class UpdateCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, Movie movie, String username, DatagramPacket packet) {
-        movieList.update(tryParse(params), movie, username, packet);
+    public void execute(String params, Movie movie, String username) {
+        movieList.update(tryParse(params), movie, username);
     }
 
     @Override

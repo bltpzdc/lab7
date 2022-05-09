@@ -33,7 +33,7 @@ public class ExecuteScript implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
+    public void execute(String params, String username, String password) {
         manager.executeScript(params);
     }
 

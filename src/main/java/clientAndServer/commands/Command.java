@@ -12,10 +12,10 @@ public interface Command {
     String getUsername();
     String getPassword();
 
-    default void execute(String params, String username, String password, DatagramPacket packet) {};
+    default void execute(String params, String username, String password) {};
 
-    default void execute(Movie movie, String username, DatagramPacket packet){};
-    default void execute(String params, Movie movie, String username, DatagramPacket packet){};
+    default void execute(Movie movie, String username){};
+    default void execute(String params, Movie movie, String username){};
     String getName();
     boolean isWithElement();
     boolean isWithArgs();

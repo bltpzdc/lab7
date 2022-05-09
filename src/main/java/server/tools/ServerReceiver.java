@@ -32,8 +32,8 @@ public class ServerReceiver implements Runnable{
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(receiveData))) {
             Command command = (Command) objectInputStream.readObject();
             System.out.println("Command "+ command.getName()+" received.");
-            poolExecutor.execute(() -> invoker.execute(command, receivePacket));
-            /*invoker.execute(command, receivePacket);*/
+            PacketsSafe.put(command.getUsername(), receivePacket);
+            poolExecutor.execute(() -> invoker.execute(command));
             saver.save(command.getName());
         } catch (Exception e) {
         }

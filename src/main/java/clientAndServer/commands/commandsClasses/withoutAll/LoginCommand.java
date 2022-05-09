@@ -32,8 +32,8 @@ public class LoginCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        movieList.login(username, password, packet);
+    public void execute(String params, String username, String password) {
+        movieList.login(username, password);
     }
 
     @Override

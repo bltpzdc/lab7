@@ -33,8 +33,8 @@ public class ClearCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        movieList.clear(username, packet);
+    public void execute(String params, String username, String password) {
+        movieList.clear(username);
     }
 
     @Override

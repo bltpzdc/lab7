@@ -35,8 +35,8 @@ public class RemoveGreaterCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(Movie movie, String username, DatagramPacket packet){
-        manager.removeGreater(movie, username, packet);
+    public void execute(Movie movie, String username){
+        manager.removeGreater(movie, username);
     }
 
 

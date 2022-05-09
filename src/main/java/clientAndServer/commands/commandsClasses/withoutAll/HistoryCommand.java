@@ -33,8 +33,8 @@ public class HistoryCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        manager.history(packet);
+    public void execute(String params, String username, String password) {
+        manager.history(username);
     }
 
     @Override

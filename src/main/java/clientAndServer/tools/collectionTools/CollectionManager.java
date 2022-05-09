@@ -30,63 +30,60 @@ public class CollectionManager {
     @Getter
     private CustomVector<Movie> movieList;
     private static ExecutorService poolSender = Executors.newCachedThreadPool();
-    ServerSender serverSender = new ServerSender();
-    ServerAnswer serverAnswer;
-    DatabaseCommunicator databaseCommunicator;
-    PreparedStatement preparedStatement;
-    ResultSet resultSet;
-    Connection connection;
+    private ServerSender serverSender = new ServerSender();
+    private ServerAnswer serverAnswer;
+    private DatabaseCommunicator databaseCommunicator;
 
     public CollectionManager(CollectionLoader loader, DatabaseCommunicator databaseCommunicator) {
         movieList=loader.getMovieList();
         this.databaseCommunicator = databaseCommunicator;
     }
 
-    public void info(DatagramPacket packet){
+    public void info(String username){
 
         serverAnswer = new ServerAnswer( "Collection information:\n"+
                 "Type: "+movieList.toString()+".\n"+
                 "Initialize date: "+movieList.getInitTime()+".\n"+
                 "Element count: "+movieList.size());
-        poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+        poolSender.execute(() -> serverSender.send(serverAnswer, username));
     }
 
-    public void show(DatagramPacket packet){
+    public void show(String username){
         String ans="";
         if (movieList.size()==0){
             serverAnswer = new ServerAnswer("There's no any elements in collection.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
         else{
             for (Movie i:movieList){
                 ans = ans+i+"\n";
             }
             serverAnswer = new ServerAnswer(ans);
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
     }
 
-    public void add(Movie movie, String username, DatagramPacket packet){
+    public synchronized void add(Movie movie, String username){
         try {
             databaseCommunicator.add(movie, username);
             movieList.clear();
             databaseCommunicator.load(movieList);
         } catch (ClassNotFoundException e) {
             serverAnswer = new ServerAnswer("Something went wrong. Check database drivers.");
-            serverSender.send(serverAnswer, packet);
+            serverSender.send(serverAnswer, username);
         } catch (SQLException e) {
             serverAnswer = new ServerAnswer("Database is not available now.");
             e.printStackTrace();
-            serverSender.send(serverAnswer, packet);
+            serverSender.send(serverAnswer, username);
         }
         serverAnswer = new ServerAnswer("New element has been added to collection.");
-        serverSender.send(serverAnswer, packet);
+        serverSender.send(serverAnswer, username);
     }
 
-    public void update(int id, Movie movie, String username, DatagramPacket packet) {
+    public synchronized void update(int id, Movie movie, String username) {
         if (id < 1){
             serverAnswer = new ServerAnswer("ID should be higher than 0.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
         else {
             try {
@@ -101,19 +98,19 @@ public class CollectionManager {
                 else serverAnswer = new ServerAnswer("No elements with this ID.");
             } catch (ClassNotFoundException e) {
                 serverAnswer = new ServerAnswer("Something went wrong. Check database drivers.");
-                poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+                poolSender.execute(() -> serverSender.send(serverAnswer, username));
             } catch (SQLException e) {
                 serverAnswer = new ServerAnswer("Database is not available now.");
-                poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+                poolSender.execute(() -> serverSender.send(serverAnswer, username));
             }
         }
-        poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+        poolSender.execute(() -> serverSender.send(serverAnswer, username));
     }
 
-    public void remove(int id, String username, DatagramPacket packet){
+    public synchronized void remove(int id, String username){
         if (id < 1){
             serverAnswer = new ServerAnswer("ID should be higher than 0.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
         else {
             try {
@@ -132,28 +129,28 @@ public class CollectionManager {
                 else serverAnswer = new ServerAnswer("No elements with this ID.");
             } catch (ClassNotFoundException e) {
                 serverAnswer = new ServerAnswer("Something went wrong. Check database drivers.");
-                poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+                poolSender.execute(() -> serverSender.send(serverAnswer, username));
             } catch (SQLException e) {
                 serverAnswer = new ServerAnswer("Database is not available now.");
-                poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+                poolSender.execute(() -> serverSender.send(serverAnswer, username));
             }
         }
-        poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+        poolSender.execute(() -> serverSender.send(serverAnswer, username));
     }
-    public void clear(String username, DatagramPacket packet){
+    public synchronized void clear(String username){
         try {
             movieList = databaseCommunicator.clear(username);
             serverAnswer = new ServerAnswer("All your elements have been deleted from collection.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         } catch (ClassNotFoundException e) {
             serverAnswer = new ServerAnswer("Something went wrong. Check database drivers.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         } catch (SQLException e) {
             serverAnswer = new ServerAnswer("Database is not available now.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
     }
-    public void help(DatagramPacket packet){
+    public void help(String username){
         serverAnswer = new ServerAnswer("Commands :\n"+
                 "info : collection information.\n"+
                 "show : all elements of collection.\n"+
@@ -170,16 +167,16 @@ public class CollectionManager {
                 "group_counting_by_id : group collection elements by their id and show count of elements in every group.\n"+
                 "filter_less_than_mpaa_rating mpaaRating : show elements with mpaa rating lower than specified.\n"+
                 "print_descending : show elements in descending order.");
-        poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+        poolSender.execute(() -> serverSender.send(serverAnswer, username));
     }
     public void save(){
         CollectionSaver saver = new CollectionSaver(this);
         saver.save();
     }
-    public void insertAt(int index, Movie movie, String username, DatagramPacket packet){
+    public synchronized void insertAt(int index, Movie movie, String username){
         if (index < 0 || index > movieList.size()){
             serverAnswer = new ServerAnswer("Index should be from 0 to "+movieList.size()+".");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
         else {
             try {
@@ -189,30 +186,30 @@ public class CollectionManager {
                 movieList.clear();
                 databaseCommunicator.load(movieList);
                 serverAnswer = new ServerAnswer("Element inserted");
-                poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+                poolSender.execute(() -> serverSender.send(serverAnswer, username));
             } catch (ClassNotFoundException e) {
                 serverAnswer = new ServerAnswer("Something went wrong. Check database drivers.");
-                poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+                poolSender.execute(() -> serverSender.send(serverAnswer, username));
             } catch (SQLException e) {
                 serverAnswer = new ServerAnswer("Database is not available now.");
-                poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+                poolSender.execute(() -> serverSender.send(serverAnswer, username));
             }
         }
     }
-    public void removeGreater(Movie movie, String username, DatagramPacket packet){
+    public synchronized void removeGreater(Movie movie, String username){
         try {
             movieList = databaseCommunicator.removeGreater(movie, username);
             serverAnswer = new ServerAnswer("All your elements with oscars count higher that was inserted were deleted.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         } catch (ClassNotFoundException e) {
             serverAnswer = new ServerAnswer("Something went wrong. Check database drivers.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         } catch (SQLException e) {
             serverAnswer = new ServerAnswer("Database is not available now.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
     }
-    public void mpaaRatingFilter(MpaaRating mpaaRating, DatagramPacket packet){
+    public void mpaaRatingFilter(MpaaRating mpaaRating, String username){
         MpaaRatingComparator comparator = new MpaaRatingComparator();
         int sch=0;
         String ans = "";
@@ -224,34 +221,34 @@ public class CollectionManager {
         }
         if (sch==0){
             serverAnswer = new ServerAnswer("No elements with mpaa rating lower than introduced.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
         else{
             serverAnswer = new ServerAnswer(ans);
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
     }
-    public void printDescending(DatagramPacket packet){
+    public void printDescending(String username){
         String ans="";
         if (!movieList.isEmpty()) {
             for (int i = movieList.size() - 1; i > -1; i -= 1) {
                 ans = ans + movieList.get(i) + "\n";
             }
             serverAnswer = new ServerAnswer(ans);
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
         else{
             serverAnswer = new ServerAnswer("There is no any elements in collection.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
     }
     public void exit(){
         ConsoleReader.setRunnerFlag(false);
     }
-    public void history(DatagramPacket packet){
+    public void history(String username){
         if (HistorySafe.getHistory().isEmpty()){
             serverAnswer = new ServerAnswer("You have not entered commands yet");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
         else{
             String outPut="Last commands (from 1 to 8):\n";
@@ -259,10 +256,10 @@ public class CollectionManager {
                 outPut = outPut+i+" ";
             }
             serverAnswer = new ServerAnswer(outPut);
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, username));
         }
     }
-    public void groupCountingId(DatagramPacket packet){
+    public void groupCountingId(String username){
         List<Movie> d2 = new ArrayList<>();
         List<Movie> ud2 = new ArrayList<>();
         for (Movie i:movieList){
@@ -272,10 +269,10 @@ public class CollectionManager {
         serverAnswer = new ServerAnswer("2 groups were created.\n" +
                 "Count of group 1 (elements with ID which is divisible by 2):"+d2.size()+"\n" +
                 "Count of group 2 (elements with ID which is not divisible by 2):"+ud2.size());
-        poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+        poolSender.execute(() -> serverSender.send(serverAnswer, username));
     }
 
-    public void login(String user, String password, DatagramPacket packet){
+    public void login(String user, String password){
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             String hashedPassword = new String(messageDigest.digest(password.getBytes()));
@@ -285,20 +282,20 @@ public class CollectionManager {
             else {
                 serverAnswer = new ServerAnswer("Invalid login or password.");
             }
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, user));
         } catch (ClassNotFoundException e) {
             serverAnswer = new ServerAnswer("Something went wrong. Check database drivers.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, user));
         } catch (SQLException e) {
             serverAnswer = new ServerAnswer("Database is not available now.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, user));
         } catch (NoSuchAlgorithmException e) {
             serverAnswer = new ServerAnswer("Can not hash your password. Try again.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, user));
         }
     }
 
-    public void register(String user, String password, DatagramPacket packet){
+    public void register(String user, String password){
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             String hashedPassword =  new String(messageDigest.digest(password.getBytes()));
@@ -308,16 +305,16 @@ public class CollectionManager {
             else {
                 serverAnswer = new ServerAnswer("This username is already reserved. Try another");
             }
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, user));
         } catch (ClassNotFoundException e) {
             serverAnswer = new ServerAnswer("Something went wrong. Check database drivers.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, user));
         } catch (SQLException e) {
             serverAnswer = new ServerAnswer("Database is not available now.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, user));
         } catch (NoSuchAlgorithmException e) {
             serverAnswer = new ServerAnswer("Can not hash your password. Try again.");
-            poolSender.execute(() -> serverSender.send(serverAnswer, packet));
+            poolSender.execute(() -> serverSender.send(serverAnswer, user));
         }
     }
 

@@ -35,8 +35,8 @@ public class AddCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(Movie movie, String username, DatagramPacket packet){
-        manager.add(movie, username, packet);
+    public void execute(Movie movie, String username){
+        manager.add(movie, username);
     }
 
 

@@ -15,18 +15,18 @@ public class Invoker {
         else if ((CommandManager.getCommands().get(name).isWithArgs()==false)&&(params!="")){throw new TooManyArgsException();}
         Command command = CommandManager.getCommands().get(name);
         command.setParams(params);
-        execute(command, null);
+        execute(command);
     }
 
-    public void execute(Command command, DatagramPacket packet){
+    public void execute(Command command){
         if (command.isWithElement()&&!command.isWithArgs()){
-            CommandManager.getCommands().get(command.getName()).execute(command.getMovie(), command.getUsername(), packet);
+            CommandManager.getCommands().get(command.getName()).execute(command.getMovie(), command.getUsername());
         }
         else if (command.isWithArgs()&&command.isWithElement()){
-            CommandManager.getCommands().get(command.getName()).execute(command.getParams(), command.getMovie(), command.getUsername(), packet);
+            CommandManager.getCommands().get(command.getName()).execute(command.getParams(), command.getMovie(), command.getUsername());
         }
         else {
-            CommandManager.getCommands().get(command.getName()).execute(command.getParams(), command.getUsername(), command.getPassword(), packet);
+            CommandManager.getCommands().get(command.getName()).execute(command.getParams(), command.getUsername(), command.getPassword());
         }
     }
 }

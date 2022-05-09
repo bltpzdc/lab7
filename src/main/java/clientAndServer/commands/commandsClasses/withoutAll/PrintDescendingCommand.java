@@ -33,8 +33,8 @@ public class PrintDescendingCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        manager.printDescending(packet);
+    public void execute(String params, String username, String password) {
+        manager.printDescending(username);
     }
 
     @Override

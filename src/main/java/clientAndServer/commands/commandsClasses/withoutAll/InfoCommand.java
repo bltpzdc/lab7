@@ -33,8 +33,8 @@ public class InfoCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        manager.info(packet);
+    public void execute(String params, String username, String password) {
+        manager.info(username);
     }
 
     @Override

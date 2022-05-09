@@ -34,8 +34,8 @@ public class RemoveByIdCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        movieList.remove(tryParse(params), username, packet);
+    public void execute(String params, String username, String password) {
+        movieList.remove(tryParse(params), username);
     }
 
     @Override

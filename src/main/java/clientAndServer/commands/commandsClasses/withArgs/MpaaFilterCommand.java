@@ -38,8 +38,8 @@ public class MpaaFilterCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        manager.mpaaRatingFilter(tryParse(params), packet);
+    public void execute(String params, String username, String password) {
+        manager.mpaaRatingFilter(tryParse(params), username);
     }
 
 

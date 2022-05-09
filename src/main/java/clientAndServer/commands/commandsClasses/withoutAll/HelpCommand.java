@@ -48,7 +48,7 @@ public class HelpCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        manager.help(packet);
+    public void execute(String params, String username, String password) {
+        manager.help(username);
     }
 }

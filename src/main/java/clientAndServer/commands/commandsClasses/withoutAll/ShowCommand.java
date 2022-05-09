@@ -34,8 +34,8 @@ public class ShowCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        manager.show(packet);
+    public void execute(String params, String username, String password) {
+        manager.show(username);
     }
 
     @Override

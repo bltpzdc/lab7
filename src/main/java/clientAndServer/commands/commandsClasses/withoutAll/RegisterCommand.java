@@ -32,8 +32,8 @@ public class RegisterCommand implements Command, Serializable {
     }
 
     @Override
-    public void execute(String params, String username, String password, DatagramPacket packet) {
-        movieList.register(username, password, packet);
+    public void execute(String params, String username, String password) {
+        movieList.register(username, password);
     }
 
     @Override
