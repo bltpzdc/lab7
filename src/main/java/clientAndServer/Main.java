@@ -5,9 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Main {
-    static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
-    static final String name = "postgres";
-    static final String password = "5NbQhXEe";
+    static final String DB_URL = "jdbc:postgresql://localhost:63333/studs";
+    static final String name = "s336762";
+    static final String password = "hbc698";
+    //ssh -L 63333:pg:5432 s336762@se.ifmo.ru -p 2222
     public static void main(String[] args){
         Connection connection;
 

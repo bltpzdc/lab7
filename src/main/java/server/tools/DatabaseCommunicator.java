@@ -3,12 +3,11 @@ package server.tools;
 import clientAndServer.startingData.*;
 import clientAndServer.tools.insideCommands.MovieBuilder;
 
+import java.io.*;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DatabaseCommunicator {
     private static HashMap<Long, Movie> bufferedMovies;
@@ -17,10 +16,20 @@ public class DatabaseCommunicator {
     private String request;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
+    private static String DBLink;
+    private static String USERNAME;
+    private static String PASSWORD;
 
     public void lazyInitConnection() throws SQLException {
-        if (connection == null)
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "5NbQhXEe");
+        if (connection == null) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("DB_info.txt")))) {
+                /*BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("DB_info.txt")));*/
+                DBLink = reader.readLine();
+                USERNAME = reader.readLine();
+                PASSWORD = reader.readLine();
+            } catch (IOException ignored){}
+            connection = DriverManager.getConnection(DBLink, USERNAME, PASSWORD);
+        }
     }
 
     public boolean canFindMovieByID(int id) throws ClassNotFoundException, SQLException {

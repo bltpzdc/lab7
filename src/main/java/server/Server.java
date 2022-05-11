@@ -25,7 +25,6 @@ public class Server {
         loader.loadDatabase();
         CollectionManager collectionManager = new CollectionManager(loader, new DatabaseCommunicator());
         CommandManager commandManager = new CommandManager(collectionManager);
-        CollectionSaver saver = new CollectionSaver(collectionManager);
         try {
             DatagramSocket serverSocket = new DatagramSocket(SERVER_PORT);
             ServerReceiver receiver = new ServerReceiver(serverSocket);
