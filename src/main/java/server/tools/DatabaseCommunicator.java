@@ -217,15 +217,6 @@ public class DatabaseCommunicator {
         else return false;
     }
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        DatabaseCommunicator communicator = new DatabaseCommunicator();
-        MovieBuilder builder = new MovieBuilder();
-        Movie movie = builder.build();
-        communicator.remove4Insert(1);
-        communicator.add(movie, "bandit228");
-        communicator.add4Insert();
-    }
-
     public void remove4Insert(int index) throws SQLException {
         lazyInitConnection();
         request = "select M.id, M.name, x, y, creation_date, oscars_count, genre, mpaa_rating, owner, P.name, birthday, eye_color, hair_color, nationality, P.id from \"Movies\" as M inner join \"Persons\" P on M.person = P.id";
